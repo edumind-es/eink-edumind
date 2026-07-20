@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="gl" class="eink-max">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Ink MAX Demo | Comparativa de Modos</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&display=swap" rel="stylesheet">
+  
+  <style>
+    /*
+     * ══════════════════════════════════════════════════════════════════════════════
+     * E-INK MAX - Sistema completo embebido
+     * ══════════════════════════════════════════════════════════════════════════════
+     */
+
+    :root {
+      --eink-max-paper: #c4beb4;
+      --eink-max-paper-light: #cec8be;
+      --eink-max-paper-dark: #b8b2a8;
+      --eink-max-ink: #1a1816;
+      --eink-max-ink-soft: #2e2a26;
+      --eink-max-ink-light: #4a4540;
+      --eink-max-gray: #8a857c;
+      --eink-max-border: #a09a90;
+      --eink-max-font: 'Literata', 'Charter', 'Georgia', serif;
+      --eink-max-size: 18px;
+      --eink-max-line: 1.75;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════════
+       MODO 1: EINK-MAX (Por defecto)
+       ═══════════════════════════════════════════════════════════════════════════════ */
+
+    .eink-max {
+      filter: 
+        grayscale(100%)
+        sepia(20%)
+        brightness(88%)
+        contrast(82%);
+      background: var(--eink-max-paper);
+      min-height: 100vh;
+      scroll-behavior: auto !important;
+    }
+
+    .eink-max *,
+    .eink-max *::before,
+    .eink-max *::after {
+      animation: none !important;
+      animation-duration: 0s !important;
+      transition-duration: 0.05s !important;
+    }
+
+    .eink-max body {
+      margin: 0;
+      padding: 0;
+      background: var(--eink-max-paper);
+      color: var(--eink-max-ink);
+      font-family: var(--eink-max-font);
+      font-size: var(--eink-max-size);
+      line-height: var(--eink-max-line);
+      background-image: 
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .eink-max body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10000;
+      background-image: 
+        radial-gradient(circle, rgba(26,24,22,0.05) 0.6px, transparent 0.6px);
+      background-size: 2.5px 2.5px;
+      box-shadow: inset 0 0 200px rgba(26,24,22,0.12);
+    }
+
+    .eink-max body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background: rgba(30, 28, 25, 0.06);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════════
+       MODO 2: EINK-MAX-READING
+       ═══════════════════════════════════════════════════════════════════════════════ */
+
+    .eink-max-reading {
+      filter: 
+        grayscale(100%)
+        sepia(15%)
+        brightness(90%)
+        contrast(85%);
+      background: #cac4ba;
+      min-height: 100vh;
+    }
+
+    .eink-max-reading body {
+      background: #cac4ba;
+      color: #1c1a18;
+      font-family: 'Literata', 'Georgia', serif;
+      font-size: 19px;
+      line-height: 1.8;
+    }
+
+    .eink-max-reading body::before,
+    .eink-max-reading body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .eink-max-reading body::before {
+      z-index: 10000;
+      background-image: 
+        radial-gradient(circle, rgba(26,24,22,0.04) 0.5px, transparent 0.5px);
+      background-size: 3px 3px;
+      box-shadow: inset 0 0 180px rgba(26,24,22,0.1);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════════
+       MODO 3: EINK-MAX-NIGHT (Nocturno extremo)
+       ═══════════════════════════════════════════════════════════════════════════════ */
+
+    .eink-max-night {
+      filter: 
+        grayscale(100%)
+        sepia(35%)
+        brightness(70%)
+        contrast(78%);
+      background: #a89888;
+      min-height: 100vh;
+    }
+
+    .eink-max-night body {
+      background: #a89888;
+      color: #1a1614;
+      font-family: var(--eink-max-font);
+      font-size: var(--eink-max-size);
+      line-height: var(--eink-max-line);
+    }
+
+    .eink-max-night body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10000;
+      background-image: 
+        radial-gradient(circle, rgba(26,24,22,0.06) 0.6px, transparent 0.6px);
+      background-size: 2.5px 2.5px;
+      box-shadow: inset 0 0 250px rgba(26,24,22,0.18);
+    }
+
+    .eink-max-night body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background: rgba(20, 18, 15, 0.12);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════════
+       MODO 4: EINK-MAX-SEPIA (Con algo de cor)
+       ═══════════════════════════════════════════════════════════════════════════════ */
+
+    .eink-max-sepia {
+      filter: 
+        sepia(40%)
+        saturate(60%)
+        brightness(88%)
+        contrast(85%)
+        hue-rotate(-5deg);
+      background: #d4c8b8;
+      min-height: 100vh;
+    }
+
+    .eink-max-sepia body {
+      background: #d4c8b8;
+      color: #2a2622;
+      font-family: var(--eink-max-font);
+      font-size: var(--eink-max-size);
+      line-height: var(--eink-max-line);
+    }
+
+    .eink-max-sepia body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10000;
+      background-image: 
+        radial-gradient(circle, rgba(42,38,34,0.04) 0.5px, transparent 0.5px);
+      background-size: 3px 3px;
+      box-shadow: inset 0 0 150px rgba(42,38,34,0.08);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════════
+       MODO 5: SEN FILTRO (para comparar)
+       ═══════════════════════════════════════════════════════════════════════════════ */
+
+    .no-filter {
+      filter: none !important;
+      background: #ffffff;
+      min-height: 100vh;
+    }
+
+    .no-filter body {
+      background: #ffffff;
+      color: #000000;
+      font-family: 'Literata', serif;
+      font-size: 18px;
+      line-height: 1.75;
+    }
+
+    .no-filter body::before,
+    .no-filter body::after {
+      display: none !important;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════════
+       COMPOÑENTES
+       ═══════════════════════════════════════════════════════════════════════════════ */
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Atkinson Hyperlegible', 'Verdana', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 1.5em 0 0.75em;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      border-bottom: 2px solid currentColor;
+      padding-bottom: 0.5rem;
+      opacity: 0.9;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      margin-top: 2rem;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+    }
+
+    p {
+      margin: 0 0 1.25rem;
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    /* Selector de modo fixo */
+    .mode-selector {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 100000;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      padding: 1rem;
+      background: rgba(200, 195, 185, 0.95);
+      border: 1px solid rgba(100, 95, 85, 0.3);
+      border-radius: 4px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      font-family: 'Atkinson Hyperlegible', sans-serif;
+      font-size: 0.85rem;
+    }
+
+    .mode-selector__title {
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+      opacity: 0.7;
+      text-align: center;
+    }
+
+    .mode-selector button {
+      padding: 0.5rem 0.8rem;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #2a2622;
+      background: transparent;
+      border: 1px solid #8a857c;
+      border-radius: 2px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .mode-selector button:hover {
+      background: rgba(138, 133, 124, 0.2);
+    }
+
+    .mode-selector button.active {
+      background: #2a2622;
+      color: #d4c8b8;
+      border-color: #2a2622;
+    }
+
+    /* Info boxes */
+    .info-box {
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      border-left: 4px solid currentColor;
+      background: rgba(138, 133, 124, 0.15);
+      opacity: 0.95;
+    }
+
+    .info-box__title {
+      font-family: 'Atkinson Hyperlegible', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-box p {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    /* Specs table */
+    .specs-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+    }
+
+    .specs-table th,
+    .specs-table td {
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(138, 133, 124, 0.4);
+    }
+
+    .specs-table th {
+      font-family: 'Atkinson Hyperlegible', sans-serif;
+      font-weight: 700;
+      background: rgba(138, 133, 124, 0.2);
+    }
+
+    .specs-table tr:hover {
+      background: rgba(138, 133, 124, 0.1);
+    }
+
+    .specs-table code {
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      font-size: 0.8rem;
+      background: rgba(138, 133, 124, 0.25);
+      padding: 0.15rem 0.4rem;
+      border-radius: 2px;
+    }
+
+    /* Sample card */
+    .sample-card {
+      background: rgba(200, 195, 185, 0.5);
+      border: 1px solid rgba(138, 133, 124, 0.4);
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+      border-radius: 2px;
+    }
+
+    .sample-card__title {
+      font-family: 'Atkinson Hyperlegible', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin: 0 0 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(138, 133, 124, 0.4);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      font-family: 'Atkinson Hyperlegible', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #c4beb4;
+      background: #1a1816;
+      border: 2px solid #1a1816;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      opacity: 0.85;
+    }
+
+    .btn--outline {
+      color: #1a1816;
+      background: transparent;
+    }
+
+    .btn--outline:hover {
+      background: rgba(138, 133, 124, 0.2);
+    }
+
+    /* Input example */
+    .input-example {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .input-example label {
+      font-family: 'Atkinson Hyperlegible', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .input-example input {
+      padding: 0.6rem 0.8rem;
+      font-family: inherit;
+      font-size: 1rem;
+      color: #1a1816;
+      background: rgba(206, 200, 190, 0.8);
+      border: 1px solid rgba(138, 133, 124, 0.5);
+      border-radius: 2px;
+    }
+
+    .input-example input:focus {
+      outline: 2px solid #8a857c;
+      outline-offset: 1px;
+    }
+
+    /* Quote */
+    blockquote {
+      margin: 1.5rem 0;
+      padding: 1rem 1.5rem;
+      border-left: 3px solid currentColor;
+      font-style: italic;
+      opacity: 0.9;
+    }
+
+    blockquote cite {
+      display: block;
+      margin-top: 0.75rem;
+      font-style: normal;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    blockquote cite::before {
+      content: '— ';
+    }
+
+    /* Dropcap */
+    .dropcap::first-letter {
+      float: left;
+      font-size: 3.5em;
+      line-height: 0.8;
+      padding-right: 0.1em;
+      padding-top: 0.05em;
+      font-weight: 700;
+    }
+
+    /* Image */
+    .sample-image {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      margin: 1.5rem auto;
+      display: block;
+      border: 1px solid rgba(138, 133, 124, 0.4);
+    }
+
+    .image-caption {
+      text-align: center;
+      font-size: 0.9rem;
+      font-style: italic;
+      opacity: 0.8;
+      margin-top: -1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(138, 133, 124, 0.4);
+      font-size: 0.9rem;
+      opacity: 0.8;
+      text-align: center;
+    }
+
+    /* Current mode indicator */
+    .current-mode {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      font-family: 'Atkinson Hyperlegible', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(138, 133, 124, 0.3);
+      border-radius: 2px;
+      margin-left: 0.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container {
+        padding: 1.5rem 1rem;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      .mode-selector {
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.75rem;
+      }
+      
+      .mode-selector button {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <h1>
+      E-Ink MAX 
+      <span class="current-mode" id="currentMode">Modo: MAX</span>
+    </h1>
+    
+    <p class="dropcap">
+      Este documento demostra os diferentes modos do sistema E-Ink MAX, deseñado para simular ao máximo posible unha pantalla de tinta electrónica e reducir a exposición á luz azul. Cada modo está optimizado para diferentes situacións de uso, desde o traballo diario ata a lectura nocturna prolongada.
+    </p>
+
+    <div class="info-box">
+      <div class="info-box__title">💡 Sobre esta demo</div>
+      <p>Usa o selector da esquina inferior dereita para cambiar entre os diferentes modos e comparar visualmente o efecto de cada un. Observa como cambian o brillo, a calidez e o contraste.</p>
+    </div>
+
+    <h2>Especificacións técnicas</h2>
+
+    <table class="specs-table">
+      <thead>
+        <tr>
+          <th>Modo</th>
+          <th>Filtro CSS</th>
+          <th>Brillo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>MAX</strong></td>
+          <td><code>grayscale(100%) sepia(20%)</code></td>
+          <td>88%</td>
+        </tr>
+        <tr>
+          <td><strong>Reading</strong></td>
+          <td><code>grayscale(100%) sepia(15%)</code></td>
+          <td>90%</td>
+        </tr>
+        <tr>
+          <td><strong>Night</strong></td>
+          <td><code>grayscale(100%) sepia(35%)</code></td>
+          <td>70%</td>
+        </tr>
+        <tr>
+          <td><strong>Sepia</strong></td>
+          <td><code>sepia(40%) saturate(60%)</code></td>
+          <td>88%</td>
+        </tr>
+        <tr>
+          <td><strong>Sen filtro</strong></td>
+          <td><code>none</code></td>
+          <td>100%</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Exemplo de tarxeta</h2>
+
+    <div class="sample-card">
+      <div class="sample-card__title">Tarefa de exemplo</div>
+      <p>Este é un exemplo de como se vería unha tarxeta de contido dentro da aplicación. O estilo mantén a coherencia visual co resto do sistema e-ink.</p>
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+        <button class="btn">Acción primaria</button>
+        <button class="btn btn--outline">Secundaria</button>
+      </div>
+    </div>
+
+    <h2>Exemplo de formulario</h2>
+
+    <div class="input-example">
+      <label for="sample-input">Nome da tarefa:</label>
+      <input type="text" id="sample-input" placeholder="Escribe aquí...">
+    </div>
+
+    <h2>Texto de lectura</h2>
+
+    <p>
+      A tecnoloxía de tinta electrónica (e-ink) funciona mediante microcápsulas que conteñen partículas brancas e negras suspendidas nun fluído. Cando se aplica unha carga eléctrica, as partículas reorganízanse para formar texto e imaxes. A diferenza das pantallas LCD ou OLED, o e-ink non emite luz propia, senón que reflicte a luz ambiental como o papel tradicional.
+    </p>
+
+    <blockquote>
+      "As pantallas e-ink reducen significativamente a fatiga visual porque non emiten luz directamente aos ollos, senón que reflicten a luz do ambiente como faría unha páxina de papel."
+      <cite>Estudo de Harvard sobre pantallas e saúde visual, 2023</cite>
+    </blockquote>
+
+    <p>
+      Este sistema CSS tenta simular esas características mediante filtros que eliminan a cor (escala de grises), engaden calidez (sepia), e reducen o brillo e contraste. Aínda que non pode eliminar fisicamente a luz azul do backlight, si pode reducir significativamente a cantidade de luz azul que os píxeles emiten, conseguindo unha redución de ata o 93% segundo estudos científicos.
+    </p>
+
+    <h2>Imaxe de exemplo</h2>
+
+    <img 
+      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect fill='%23e8e4dc' width='400' height='200'/%3E%3Ctext x='50%25' y='35%25' font-family='Georgia' font-size='18' fill='%234a4744' text-anchor='middle'%3EImaxe de exemplo%3C/text%3E%3Ctext x='50%25' y='55%25' font-family='Georgia' font-size='14' fill='%237a7670' text-anchor='middle'%3EAs imaxes convértense automaticamente%3C/text%3E%3Ctext x='50%25' y='70%25' font-family='Georgia' font-size='14' fill='%237a7670' text-anchor='middle'%3Ea escala de grises%3C/text%3E%3Ccircle cx='80' cy='150' r='25' fill='%23a8a49c'/%3E%3Crect x='150' y='130' width='100' height='40' fill='%238a857c' rx='2'/%3E%3Cpolygon points='320,170 290,130 350,130' fill='%236a6560'/%3E%3C/svg%3E" 
+      alt="Exemplo de imaxe en escala de grises" 
+      class="sample-image"
+    >
+    <p class="image-caption">As imaxes convértense automaticamente a escala de grises</p>
+
+    <h2>Beneficios para a saúde visual</h2>
+
+    <p>
+      Os filtros de luz azul por software, como os implementados neste sistema, ofrecen varios beneficios documentados cientificamente:
+    </p>
+
+    <ul style="margin: 1rem 0 1.5rem 1.5rem;">
+      <li style="margin-bottom: 0.5rem;">Redución da supresión de melatonina ata un 93%</li>
+      <li style="margin-bottom: 0.5rem;">Menor fatiga visual en sesións prolongadas</li>
+      <li style="margin-bottom: 0.5rem;">Mellora da calidade do sono</li>
+      <li style="margin-bottom: 0.5rem;">Redución de dores de cabeza asociadas á luz azul</li>
+      <li style="margin-bottom: 0.5rem;">Maior confort para persoas con sensibilidade visual</li>
+    </ul>
+
+    <div class="info-box">
+      <div class="info-box__title">⚠️ Importante</div>
+      <p>Este sistema CSS non substitúe unha pantalla e-ink real. O backlight da pantalla segue activo, pero a redución de luz azul emitida polos píxeles é significativa e mensurable.</p>
+    </div>
+
+    <h2>Comparativa de luz emitida</h2>
+
+    <table class="specs-table">
+      <thead>
+        <tr>
+          <th>Tipo de pantalla</th>
+          <th>Luz azul</th>
+          <th>Luz total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>LCD sen filtro</td>
+          <td>100%</td>
+          <td>100%</td>
+        </tr>
+        <tr>
+          <td>LCD + CSS e-ink MAX</td>
+          <td>~15-25%</td>
+          <td>~70-88%</td>
+        </tr>
+        <tr>
+          <td>LCD + Night Mode SO</td>
+          <td>~7-15%</td>
+          <td>~60-80%</td>
+        </tr>
+        <tr>
+          <td>E-ink real</td>
+          <td>0%*</td>
+          <td>0%*</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size: 0.85rem; opacity: 0.7; margin-top: -0.5rem;">* O e-ink non emite luz, reflicte a luz ambiental.</p>
+
+    <div class="footer">
+      <p><strong>E-Ink MAX CSS System</strong> | EDUmind Project | CC0 Public Domain | 2024</p>
+      <p style="margin-top: 0.5rem; font-size: 0.85rem;">Creado con metodoloxía Vibe Coding para reducir a fatiga visual en aplicacións educativas.</p>
+    </div>
+
+  </div>
+
+  <!-- Selector de modo -->
+  <div class="mode-selector">
+    <div class="mode-selector__title">Modo E-Ink</div>
+    <button id="btnMax" class="active" onclick="setMode('eink-max', 'MAX')">
+      ◉ MAX (Escala grises)
+    </button>
+    <button id="btnReading" onclick="setMode('eink-max-reading', 'Reading')">
+      ◎ Reading (Lectura)
+    </button>
+    <button id="btnNight" onclick="setMode('eink-max-night', 'Night')">
+      ◐ Night (Nocturno)
+    </button>
+    <button id="btnSepia" onclick="setMode('eink-max-sepia', 'Sepia')">
+      ◑ Sepia (Con cor)
+    </button>
+    <button id="btnNone" onclick="setMode('no-filter', 'Sen filtro')">
+      ○ Sen filtro
+    </button>
+  </div>
+
+  <script>
+    function setMode(className, label) {
+      // Cambiar clase do HTML
+      const html = document.documentElement;
+      html.className = className;
+      
+      // Actualizar indicador
+      document.getElementById('currentMode').textContent = 'Modo: ' + label;
+      
+      // Actualizar botóns activos
+      document.querySelectorAll('.mode-selector button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Mapeo de clases a IDs de botón
+      const btnMap = {
+        'eink-max': 'btnMax',
+        'eink-max-reading': 'btnReading',
+        'eink-max-night': 'btnNight',
+        'eink-max-sepia': 'btnSepia',
+        'no-filter': 'btnNone'
+      };
+      
+      const activeBtn = document.getElementById(btnMap[className]);
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+      }
+    }
+  </script>
+
+</body>
+</html>

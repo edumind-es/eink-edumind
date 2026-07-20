@@ -1,0 +1,349 @@
+/*
+ * E-INK CSS ESSENTIALS v2.0
+ * Versión simplificada para integrar en apps existentes
+ * EDUmind Project | CC0 Public Domain
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VARIABLES - Personaliza aquí
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --eink-paper: #d4cfc7;
+  --eink-paper-light: #ddd8d0;
+  --eink-paper-dark: #c9c4bb;
+  --eink-ink: #252422;
+  --eink-ink-soft: #3d3a36;
+  --eink-ink-light: #5c5853;
+  --eink-gray-mid: #7a7670;
+  --eink-gray-light: #a8a49c;
+  --eink-gray-pale: #c0bbb2;
+  --eink-border: var(--eink-gray-light);
+  --eink-font-sans: 'Atkinson Hyperlegible', 'Verdana', sans-serif;
+  --eink-font-serif: 'Literata', 'Georgia', serif;
+  --eink-radius: 2px;
+  --eink-transition: 0.15s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FILTRO GLOBAL - Añadir class="eink" al <html>
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.eink {
+  filter: sepia(18%) saturate(75%) brightness(96%) contrast(88%);
+  background: var(--eink-paper);
+  min-height: 100vh;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BODY - Textura de papel
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.eink body {
+  margin: 0;
+  padding: 0;
+  background: var(--eink-paper);
+  color: var(--eink-ink);
+  font-family: var(--eink-font-sans);
+  font-size: 17px;
+  line-height: 1.6;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  -webkit-font-smoothing: antialiased;
+}
+
+.eink body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10000;
+  background: radial-gradient(circle, rgba(37,36,34,0.03) 0.5px, transparent 0.5px);
+  background-size: 3px 3px;
+  box-shadow: inset 0 0 150px rgba(37,36,34,0.08);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTENEDOR
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.eink-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TIPOGRAFÍA
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.eink h1, .eink h2, .eink h3, .eink h4 {
+  color: var(--eink-ink);
+  margin: 1.5rem 0 0.75rem;
+  line-height: 1.3;
+}
+
+.eink h1 { font-size: 1.8rem; border-bottom: 2px solid var(--eink-gray-light); padding-bottom: 0.5rem; }
+.eink h2 { font-size: 1.4rem; color: var(--eink-ink-soft); }
+.eink h3 { font-size: 1.15rem; }
+
+.eink p { margin: 0 0 1rem; }
+
+.eink a {
+  color: var(--eink-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--eink-gray-mid);
+  text-underline-offset: 3px;
+}
+
+.eink a:hover { text-decoration-color: var(--eink-ink); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BOTONES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.eink-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  font-family: var(--eink-font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--eink-paper);
+  background: var(--eink-ink);
+  border: 2px solid var(--eink-ink);
+  border-radius: var(--eink-radius);
+  cursor: pointer;
+  transition: all var(--eink-transition);
+  text-decoration: none;
+}
+
+.eink-btn:hover {
+  background: var(--eink-ink-soft);
+  border-color: var(--eink-ink-soft);
+}
+
+.eink-btn--outline {
+  color: var(--eink-ink);
+  background: transparent;
+}
+
+.eink-btn--outline:hover {
+  background: var(--eink-gray-pale);
+}
+
+.eink-btn--small {
+  padding: 0.35rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+.eink-btn--large {
+  padding: 0.8rem 1.6rem;
+  font-size: 1.1rem;
+}
+
+.eink-btn--block {
+  display: flex;
+  width: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FORMULARIOS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.eink-input,
+.eink select,
+.eink textarea,
+.eink input[type="text"],
+.eink input[type="email"],
+.eink input[type="password"],
+.eink input[type="number"],
+.eink input[type="date"] {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  font-family: var(--eink-font-sans);
+  font-size: 1rem;
+  color: var(--eink-ink);
+  background: var(--eink-paper-light);
+  border: 1px solid var(--eink-border);
+  border-radius: var(--eink-radius);
+  box-sizing: border-box;
+  transition: border-color var(--eink-transition);
+}
+
+.eink-input:focus,
+.eink select:focus,
+.eink textarea:focus,
+.eink input:focus {
+  outline: none;
+  border-color: var(--eink-ink-soft);
+}
+
+.eink-input::placeholder,
+.eink input::placeholder {
+  color: var(--eink-gray-mid);
+}
+
+.eink label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TARJETAS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.eink-card {
+  background: var(--eink-paper-light);
+  border: 1px solid var(--eink-border);
+  border-radius: var(--eink-radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: 1px 2px 4px rgba(37,36,34,0.06);
+}
+
+.eink-card__title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--eink-border);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ALERTAS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.eink-alert {
+  padding: 1rem 1.25rem;
+  border-left: 4px solid var(--eink-gray-mid);
+  background: rgba(200,196,187,0.3);
+  margin: 1rem 0;
+}
+
+.eink-alert--success { border-left-color: var(--eink-ink-light); }
+.eink-alert--warning { border-left-color: var(--eink-gray-mid); }
+.eink-alert--error { border-left-color: var(--eink-ink); background: rgba(200,196,187,0.5); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TABLAS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.eink-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
+
+.eink-table th {
+  background: var(--eink-gray-pale);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  border-bottom: 2px solid var(--eink-gray-mid);
+}
+
+.eink-table td {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid var(--eink-border);
+}
+
+.eink-table tr:hover {
+  background: rgba(200,196,187,0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BADGES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.eink-badge {
+  display: inline-block;
+  padding: 0.2em 0.6em;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: var(--eink-gray-pale);
+  border: 1px solid var(--eink-border);
+  border-radius: var(--eink-radius);
+}
+
+.eink-badge--dark {
+  background: var(--eink-ink);
+  color: var(--eink-paper);
+  border-color: var(--eink-ink);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   UTILIDADES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.eink-text-muted { color: var(--eink-ink-light); }
+.eink-text-center { text-align: center; }
+.eink-text-small { font-size: 0.9rem; }
+.eink-mt-0 { margin-top: 0; }
+.eink-mb-0 { margin-bottom: 0; }
+.eink-mb-1 { margin-bottom: 1rem; }
+.eink-p-1 { padding: 1rem; }
+.eink-flex { display: flex; }
+.eink-flex-center { display: flex; align-items: center; justify-content: center; }
+.eink-flex-between { display: flex; justify-content: space-between; align-items: center; }
+.eink-gap { gap: 1rem; }
+.eink-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODO NOCHE - Añadir class="eink-night" al <html>
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.eink.eink-night {
+  filter: sepia(30%) saturate(65%) brightness(88%) contrast(85%);
+}
+
+.eink.eink-night body {
+  --eink-paper: #cac3b8;
+  --eink-paper-light: #d2cbc0;
+  background-color: var(--eink-paper);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODO OSCURO - Añadir class="eink-dark" al <html>
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.eink.eink-dark {
+  filter: sepia(10%) saturate(80%) brightness(95%) contrast(90%);
+}
+
+.eink.eink-dark body {
+  --eink-paper: #2a2826;
+  --eink-paper-light: #353230;
+  --eink-paper-dark: #1f1d1c;
+  --eink-ink: #d4cfc7;
+  --eink-ink-soft: #c0bbb2;
+  --eink-ink-light: #a8a49c;
+  --eink-gray-mid: #8a857d;
+  --eink-gray-light: #5a5650;
+  --eink-gray-pale: #3d3a38;
+  --eink-border: #5a5650;
+  background-color: var(--eink-paper);
+  color: var(--eink-ink);
+}
+
+.eink.eink-dark body::before {
+  background: radial-gradient(circle, rgba(212,207,199,0.02) 0.5px, transparent 0.5px);
+  box-shadow: inset 0 0 150px rgba(0,0,0,0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 600px) {
+  .eink body { font-size: 16px; }
+  .eink h1 { font-size: 1.5rem; }
+  .eink h2 { font-size: 1.25rem; }
+  .eink-container { padding: 1rem; }
+}

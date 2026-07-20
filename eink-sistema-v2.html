@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Ink CSS Demo | EDUmind</title>
+  
+  <!-- Google Fonts optimizadas para legibilidad -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;0,7..72,700;1,7..72,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ═══════════════════════════════════════════════════════════════════════════
+       E-INK SIMULATION - VERSIÓN AUTÉNTICA
+       Cores e texturas baseadas en pantallas Kindle/reMarkable reais
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    :root {
+      /* PALETA E-INK AUTÉNTICA - máis cálida e menos contrastada */
+      --eink-paper: #d4cfc7;           /* Papel e-ink real - ton crema/beixe */
+      --eink-paper-light: #ddd8d0;     /* Variante máis clara */
+      --eink-paper-dark: #c9c4bb;      /* Variante máis escura */
+      
+      --eink-ink: #252422;             /* Tinta - negro cálido, nunca puro */
+      --eink-ink-soft: #3d3a36;        /* Tinta suave */
+      --eink-ink-light: #5c5853;       /* Tinta clara */
+      
+      /* Escala de grises e-ink (simulando os 16 niveis) */
+      --eink-gray-dark: #4a4744;
+      --eink-gray-mid: #7a7670;
+      --eink-gray-light: #a8a49c;
+      --eink-gray-pale: #c0bbb2;
+      
+      /* Tipografía */
+      --eink-font-serif: 'Literata', 'Georgia', serif;
+      --eink-font-sans: 'Atkinson Hyperlegible', 'Verdana', sans-serif;
+      --eink-font-mono: 'JetBrains Mono', 'Consolas', monospace;
+      
+      --eink-font-size: 17px;
+      --eink-line-height: 1.65;
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       FILTRO GLOBAL - Reduce luz azul e simula e-ink
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    html {
+      /* Filtro que transforma toda a páxina a estética e-ink */
+      filter: 
+        sepia(18%)              /* Calidez significativa */
+        saturate(75%)           /* Reduce saturación */
+        brightness(96%)         /* Lixeiramente máis escuro */
+        contrast(88%);          /* Contraste reducido como e-ink real */
+      
+      background-color: var(--eink-paper);
+      min-height: 100vh;
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       TEXTURA DE PAPEL - O efecto máis importante
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--eink-paper);
+      color: var(--eink-ink);
+      font-family: var(--eink-font-serif);
+      font-size: var(--eink-font-size);
+      line-height: var(--eink-line-height);
+      
+      /* Textura granulada de papel */
+      background-image: 
+        /* Ruído fino */
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+        /* Gradiente sutil de iluminación */
+        radial-gradient(ellipse at 50% 0%, var(--eink-paper-light) 0%, var(--eink-paper) 50%, var(--eink-paper-dark) 100%);
+      
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+    
+    /* Capa adicional de textura */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 10000;
+      
+      /* Patrón de puntos moi finos - simula píxeles e-ink */
+      background-image: 
+        radial-gradient(circle at center, rgba(37, 36, 34, 0.03) 0.5px, transparent 0.5px);
+      background-size: 3px 3px;
+      
+      /* Viñeteado sutil nos bordos */
+      box-shadow: inset 0 0 150px rgba(37, 36, 34, 0.08);
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       CONTEDOR PRINCIPAL
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    .eink-container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       TIPOGRAFÍA
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--eink-font-sans);
+      color: var(--eink-ink);
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+    
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      border-bottom: 2px solid var(--eink-gray-light);
+      padding-bottom: 0.5rem;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--eink-ink-soft);
+    }
+    
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    
+    p {
+      margin: 0 0 1rem 0;
+      text-align: justify;
+      hyphens: auto;
+    }
+    
+    /* Primeira letra capitular */
+    .dropcap::first-letter {
+      float: left;
+      font-size: 3.2em;
+      line-height: 0.8;
+      padding-right: 0.08em;
+      padding-top: 0.05em;
+      font-weight: 700;
+      color: var(--eink-ink);
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       ENLACES
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    a {
+      color: var(--eink-ink);
+      text-decoration: underline;
+      text-decoration-color: var(--eink-gray-mid);
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.2s;
+    }
+    
+    a:hover {
+      text-decoration-color: var(--eink-ink);
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       CITAS
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    blockquote {
+      margin: 1.5rem 0;
+      padding: 1rem 1.5rem;
+      border-left: 3px solid var(--eink-gray-mid);
+      background-color: rgba(200, 196, 187, 0.4);
+      font-style: italic;
+      color: var(--eink-ink-soft);
+    }
+    
+    blockquote cite {
+      display: block;
+      margin-top: 0.5rem;
+      font-style: normal;
+      font-size: 0.9em;
+      color: var(--eink-gray-dark);
+    }
+    
+    blockquote cite::before {
+      content: '— ';
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       CÓDIGO
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    code {
+      font-family: var(--eink-font-mono);
+      font-size: 0.88em;
+      background-color: var(--eink-gray-pale);
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+      color: var(--eink-ink-soft);
+    }
+    
+    pre {
+      background-color: var(--eink-paper-dark);
+      border: 1px solid var(--eink-gray-light);
+      padding: 1rem;
+      overflow-x: auto;
+      border-radius: 2px;
+    }
+    
+    pre code {
+      background: none;
+      padding: 0;
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       BOTÓNS
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    .eink-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.6rem 1.2rem;
+      font-family: var(--eink-font-sans);
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--eink-paper);
+      background-color: var(--eink-ink);
+      border: 2px solid var(--eink-ink);
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+    
+    .eink-btn:hover {
+      background-color: var(--eink-ink-soft);
+      border-color: var(--eink-ink-soft);
+    }
+    
+    .eink-btn--outline {
+      color: var(--eink-ink);
+      background-color: transparent;
+    }
+    
+    .eink-btn--outline:hover {
+      background-color: var(--eink-gray-pale);
+    }
+    
+    .eink-btn--small {
+      padding: 0.35rem 0.8rem;
+      font-size: 0.85rem;
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       TARXETAS
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    .eink-card {
+      background-color: var(--eink-paper-light);
+      border: 1px solid var(--eink-gray-light);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      border-radius: 2px;
+      /* Sombra moi sutil - e-ink non ten sombras fortes */
+      box-shadow: 1px 2px 4px rgba(37, 36, 34, 0.06);
+    }
+    
+    .eink-card__title {
+      font-family: var(--eink-font-sans);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0 0 0.75rem 0;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--eink-gray-light);
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       FORMULARIOS
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      font-family: var(--eink-font-sans);
+      font-size: 1rem;
+      color: var(--eink-ink);
+      background-color: var(--eink-paper-light);
+      border: 1px solid var(--eink-gray-light);
+      border-radius: 2px;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+    
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--eink-gray-dark);
+    }
+    
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--eink-gray-mid);
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      font-family: var(--eink-font-sans);
+      font-size: 0.95rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    /* Checkbox personalizado */
+    .eink-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+    
+    .eink-checkbox input[type="checkbox"] {
+      width: 1.1rem;
+      height: 1.1rem;
+      accent-color: var(--eink-ink);
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       TÁBOAS
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+    }
+    
+    th {
+      background-color: var(--eink-gray-pale);
+      font-weight: 600;
+      text-align: left;
+      padding: 0.6rem 0.8rem;
+      border-bottom: 2px solid var(--eink-gray-mid);
+    }
+    
+    td {
+      padding: 0.6rem 0.8rem;
+      border-bottom: 1px solid var(--eink-gray-light);
+    }
+    
+    tr:hover {
+      background-color: rgba(200, 196, 187, 0.3);
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       ALERTAS
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    .eink-alert {
+      padding: 1rem 1.25rem;
+      border-left: 4px solid var(--eink-gray-mid);
+      background-color: rgba(200, 196, 187, 0.3);
+      margin: 1rem 0;
+    }
+    
+    .eink-alert--dark {
+      border-left-color: var(--eink-ink);
+      background-color: rgba(200, 196, 187, 0.5);
+    }
+    
+    .eink-alert strong {
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       BADGES
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    .eink-badge {
+      display: inline-block;
+      padding: 0.2em 0.6em;
+      font-size: 0.8rem;
+      font-weight: 500;
+      font-family: var(--eink-font-sans);
+      background-color: var(--eink-gray-pale);
+      border: 1px solid var(--eink-gray-light);
+      border-radius: 2px;
+    }
+    
+    .eink-badge--dark {
+      background-color: var(--eink-ink);
+      color: var(--eink-paper);
+      border-color: var(--eink-ink);
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       SEPARADORES
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    hr {
+      border: none;
+      height: 1px;
+      background-color: var(--eink-gray-light);
+      margin: 2rem 0;
+    }
+    
+    .divider-ornate {
+      text-align: center;
+      margin: 2rem 0;
+      color: var(--eink-gray-mid);
+      font-size: 0.9rem;
+      letter-spacing: 0.5em;
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       IMAXES - Efecto escala de grises
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    img {
+      max-width: 100%;
+      height: auto;
+      filter: grayscale(100%) contrast(90%) brightness(105%);
+      border: 1px solid var(--eink-gray-light);
+    }
+    
+    figure {
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+    
+    figcaption {
+      font-size: 0.9rem;
+      color: var(--eink-gray-dark);
+      font-style: italic;
+      margin-top: 0.5rem;
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       NAVEGACIÓN
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    .eink-nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--eink-gray-light);
+      margin-bottom: 1.5rem;
+    }
+    
+    .eink-nav__brand {
+      font-family: var(--eink-font-sans);
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--eink-ink);
+    }
+    
+    .eink-nav__links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .eink-nav__link {
+      color: var(--eink-ink-light);
+      text-decoration: none;
+      font-family: var(--eink-font-sans);
+      font-size: 0.95rem;
+      padding: 0.25rem 0;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    
+    .eink-nav__link:hover,
+    .eink-nav__link--active {
+      color: var(--eink-ink);
+      border-bottom-color: var(--eink-ink);
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       PANEL DE CONTROL (DEMO)
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    .controls {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      background: var(--eink-paper-light);
+      border: 2px solid var(--eink-ink);
+      padding: 0.75rem 1rem;
+      z-index: 10001;
+      font-family: var(--eink-font-sans);
+      font-size: 0.85rem;
+    }
+    
+    .controls p {
+      margin: 0 0 0.5rem 0;
+      text-align: left;
+    }
+    
+    .controls__buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       MODOS ALTERNATIVOS
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    /* Modo noite - máis cálido, menos luz azul */
+    html.eink-night {
+      filter: 
+        sepia(30%)
+        saturate(65%)
+        brightness(88%)
+        contrast(85%);
+    }
+    
+    html.eink-night body {
+      --eink-paper: #cac3b8;
+      --eink-paper-light: #d2cbc0;
+      background-color: var(--eink-paper);
+    }
+    
+    /* Modo escuro (inversión e-ink) */
+    html.eink-dark {
+      filter: 
+        sepia(10%)
+        saturate(80%)
+        brightness(95%)
+        contrast(90%);
+    }
+    
+    html.eink-dark body {
+      --eink-paper: #2a2826;
+      --eink-paper-light: #353230;
+      --eink-paper-dark: #1f1d1c;
+      --eink-ink: #d4cfc7;
+      --eink-ink-soft: #c0bbb2;
+      --eink-ink-light: #a8a49c;
+      --eink-gray-dark: #b0aba3;
+      --eink-gray-mid: #8a857d;
+      --eink-gray-light: #5a5650;
+      --eink-gray-pale: #3d3a38;
+      
+      background-color: var(--eink-paper);
+      color: var(--eink-ink);
+      background-image: 
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+    }
+    
+    html.eink-dark body::before {
+      background-image: 
+        radial-gradient(circle at center, rgba(212, 207, 199, 0.02) 0.5px, transparent 0.5px);
+      box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       UTILIDADES
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    .text-muted { color: var(--eink-gray-dark); }
+    .text-center { text-align: center; }
+    .text-small { font-size: 0.9rem; }
+    .mt-0 { margin-top: 0; }
+    .mb-0 { margin-bottom: 0; }
+    .mb-1 { margin-bottom: 1rem; }
+    .mb-2 { margin-bottom: 2rem; }
+    
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       DEMO: MOSTRAS DE COR
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    .color-swatches {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+    
+    .swatch {
+      width: 80px;
+      height: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-family: var(--eink-font-mono);
+      border: 1px solid var(--eink-gray-light);
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════════
+       RESPONSIVE
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    @media (max-width: 600px) {
+      :root {
+        --eink-font-size: 16px;
+      }
+      
+      h1 { font-size: 1.6rem; }
+      h2 { font-size: 1.3rem; }
+      
+      .eink-container {
+        padding: 1rem;
+      }
+      
+      .controls {
+        bottom: 0.5rem;
+        right: 0.5rem;
+        padding: 0.5rem;
+      }
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Panel de control -->
+  <div class="controls">
+    <p><strong>Modo E-Ink:</strong></p>
+    <div class="controls__buttons">
+      <button class="eink-btn eink-btn--small" onclick="setMode('normal')">Normal</button>
+      <button class="eink-btn eink-btn--small eink-btn--outline" onclick="setMode('night')">Noite</button>
+      <button class="eink-btn eink-btn--small eink-btn--outline" onclick="setMode('dark')">Escuro</button>
+    </div>
+  </div>
+
+  <div class="eink-container">
+    
+    <!-- Navegación -->
+    <nav class="eink-nav">
+      <a href="#" class="eink-nav__brand">📖 EDUmind E-Ink</a>
+      <ul class="eink-nav__links">
+        <li><a href="#tipografia" class="eink-nav__link eink-nav__link--active">Tipografía</a></li>
+        <li><a href="#componentes" class="eink-nav__link">Compoñentes</a></li>
+        <li><a href="#formularios" class="eink-nav__link">Formularios</a></li>
+      </ul>
+    </nav>
+
+    <!-- Cabeceira -->
+    <header>
+      <h1>Sistema E-Ink para EDUmind</h1>
+      <p class="text-muted" style="font-size: 1.1rem;">
+        Un sistema CSS que simula con alta fidelidade a aparencia de pantallas de tinta electrónica, 
+        reducindo a luz azul e mellorando a experiencia de lectura.
+      </p>
+    </header>
+
+    <!-- Paleta de cores -->
+    <section class="mb-2">
+      <h2>Paleta de Cores</h2>
+      <p>As pantallas e-ink teñen brancos cremosos e negros cálidos, nunca puros.</p>
+      
+      <div class="color-swatches">
+        <div class="swatch" style="background: #d4cfc7; color: #252422;">
+          Paper<br>#d4cfc7
+        </div>
+        <div class="swatch" style="background: #a8a49c; color: #252422;">
+          Gris<br>#a8a49c
+        </div>
+        <div class="swatch" style="background: #5c5853; color: #d4cfc7;">
+          Medio<br>#5c5853
+        </div>
+        <div class="swatch" style="background: #252422; color: #d4cfc7;">
+          Tinta<br>#252422
+        </div>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- Tipografía -->
+    <section id="tipografia" class="mb-2">
+      <h2>Tipografía</h2>
+      
+      <h3>Xerarquía</h3>
+      <h1 class="mt-0">Título H1 — Atkinson Hyperlegible</h1>
+      <h2>Título H2 — Subtítulo principal</h2>
+      <h3>Título H3 — Sección</h3>
+      
+      <div class="divider-ornate">◆ ◆ ◆</div>
+      
+      <h3>Texto Corrido</h3>
+      <p class="dropcap">
+        As pantallas de tinta electrónica funcionan dun xeito moi diferente ás pantallas LCD ou OLED. En lugar de emitir luz, reflicten a luz ambiental como o papel tradicional, o que reduce significativamente a fatiga visual durante sesións de lectura prolongada.
+      </p>
+      
+      <p>
+        Esta tecnoloxía emprega microcápsulas que conteñen partículas brancas e negras suspendidas nun fluído. Ao aplicar unha carga eléctrica, as partículas móvense para crear a imaxe. O resultado é unha superficie mate, sen brillos, con <strong>excelente lexibilidade</strong> mesmo baixo luz solar directa.
+      </p>
+
+      <h3>Citas</h3>
+      <blockquote>
+        A educación non é encher un balde, senón acender un lume. O verdadeiro mestre non ensina, inspira a descubrir.
+        <cite>William Butler Yeats</cite>
+      </blockquote>
+
+      <h3>Código</h3>
+      <p>O código en liña móstrase así: <code>const alumno = await buscar(id)</code></p>
+      
+      <pre><code>// Exemplo de código en bloque
+function saudarAlumno(nome) {
+  const mensaxe = `Benvido, ${nome}!`;
+  console.log(mensaxe);
+  return mensaxe;
+}</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- Compoñentes -->
+    <section id="componentes" class="mb-2">
+      <h2>Compoñentes</h2>
+
+      <h3>Tarxetas</h3>
+      <div class="grid-2">
+        <div class="eink-card">
+          <h4 class="eink-card__title">Tarxeta Básica</h4>
+          <p class="mb-0">Contido da tarxeta con información relevante para o usuario.</p>
+        </div>
+        
+        <div class="eink-card">
+          <h4 class="eink-card__title">Outra Tarxeta</h4>
+          <p class="mb-1">Con badges de estado:</p>
+          <span class="eink-badge">Pendente</span>
+          <span class="eink-badge eink-badge--dark">Activo</span>
+        </div>
+      </div>
+
+      <h3>Alertas</h3>
+      <div class="eink-alert">
+        <strong>Información</strong>
+        Esta é unha alerta informativa estándar.
+      </div>
+      
+      <div class="eink-alert eink-alert--dark">
+        <strong>Importante</strong>
+        Esta alerta require a túa atención.
+      </div>
+
+      <h3>Botóns</h3>
+      <p>
+        <button class="eink-btn">Primario</button>
+        <button class="eink-btn eink-btn--outline">Secundario</button>
+        <button class="eink-btn eink-btn--small">Pequeno</button>
+      </p>
+
+      <h3>Táboa</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Módulo</th>
+            <th>Duración</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Introdución ao Vibe Coding</td>
+            <td>2 horas</td>
+            <td><span class="eink-badge eink-badge--dark">Completado</span></td>
+          </tr>
+          <tr>
+            <td>Deseño de Prompts</td>
+            <td>3 horas</td>
+            <td><span class="eink-badge">En progreso</span></td>
+          </tr>
+          <tr>
+            <td>Apps Interactivas</td>
+            <td>4 horas</td>
+            <td><span class="eink-badge">Pendente</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <hr>
+
+    <!-- Formularios -->
+    <section id="formularios" class="mb-2">
+      <h2>Formularios</h2>
+      
+      <div class="form-group">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" placeholder="Introduce o teu nome">
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Correo electrónico:</label>
+        <input type="email" id="email" placeholder="correo@exemplo.gl">
+      </div>
+      
+      <div class="form-group">
+        <label for="nivel">Nivel educativo:</label>
+        <select id="nivel">
+          <option>Selecciona unha opción</option>
+          <option>Educación Infantil</option>
+          <option>Educación Primaria</option>
+          <option>Educación Secundaria</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="mensaxe">Mensaxe:</label>
+        <textarea id="mensaxe" rows="3" placeholder="Escribe aquí..."></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label class="eink-checkbox">
+          <input type="checkbox" checked>
+          <span>Acepto os termos e condicións</span>
+        </label>
+      </div>
+      
+      <button class="eink-btn">Enviar</button>
+    </section>
+
+    <!-- Footer -->
+    <footer style="margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--eink-gray-light);">
+      <p class="text-center text-muted text-small">
+        Sistema E-Ink v2.0 | EDUmind<br>
+        Optimizado para reducir a luz azul
+      </p>
+    </footer>
+
+  </div>
+
+  <script>
+    function setMode(mode) {
+      const html = document.documentElement;
+      html.classList.remove('eink-night', 'eink-dark');
+      
+      if (mode === 'night') {
+        html.classList.add('eink-night');
+      } else if (mode === 'dark') {
+        html.classList.add('eink-dark');
+      }
+      
+      // Actualizar botóns
+      const buttons = document.querySelectorAll('.controls__buttons button');
+      buttons.forEach((btn, i) => {
+        btn.classList.remove('eink-btn--outline');
+        if ((mode === 'normal' && i !== 0) || 
+            (mode === 'night' && i !== 1) || 
+            (mode === 'dark' && i !== 2)) {
+          btn.classList.add('eink-btn--outline');
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

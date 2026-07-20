@@ -1,0 +1,418 @@
+/*
+ * ══════════════════════════════════════════════════════════════════════════════
+ * E-INK MAX - Máxima simulación de tinta electrónica
+ * Versión extrema para máxima redución de luz azul e verde
+ * 
+ * EDUmind Project | CC0 Public Domain | 2024
+ * ══════════════════════════════════════════════════════════════════════════════
+ * 
+ * MODOS DISPOÑIBLES:
+ * - .eink-max          → Escala de grises + calidez máxima (día)
+ * - .eink-max-reading  → Optimizado para lectura prolongada
+ * - .eink-max-night    → Nocturno extremo (mínima luz)
+ * - .eink-max-sepia    → Máxima calidez (sen escala de grises)
+ * 
+ * ══════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   VARIABLES GLOBAIS
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Paleta MÁIS escura e cálida que a versión normal */
+  --eink-max-paper: #c4beb4;
+  --eink-max-paper-light: #cec8be;
+  --eink-max-paper-dark: #b8b2a8;
+  
+  --eink-max-ink: #1a1816;
+  --eink-max-ink-soft: #2e2a26;
+  --eink-max-ink-light: #4a4540;
+  
+  --eink-max-gray: #8a857c;
+  --eink-max-border: #a09a90;
+  
+  /* Tipografía optimizada para lectura */
+  --eink-max-font: 'Literata', 'Charter', 'Georgia', serif;
+  --eink-max-size: 18px;
+  --eink-max-line: 1.75;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   MODO 1: EINK-MAX (Escala de grises + calidez)
+   Uso: <html class="eink-max">
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.eink-max {
+  /* Filtro agresivo: elimina cor, engade calidez, reduce luz */
+  filter: 
+    grayscale(100%)       /* Elimina TODO o cor */
+    sepia(20%)            /* Engade calidez sen amarelo excesivo */
+    brightness(88%)       /* Reduce brillo significativamente */
+    contrast(82%);        /* Contraste suave como e-ink */
+  
+  background: var(--eink-max-paper);
+  min-height: 100vh;
+  
+  /* Desactiva animacións - como e-ink real */
+  scroll-behavior: auto !important;
+}
+
+.eink-max *,
+.eink-max *::before,
+.eink-max *::after {
+  /* Sen animacións nin transicións */
+  animation: none !important;
+  animation-duration: 0s !important;
+  transition: none !important;
+  transition-duration: 0s !important;
+}
+
+.eink-max body {
+  margin: 0;
+  padding: 0;
+  background: var(--eink-max-paper);
+  color: var(--eink-max-ink);
+  font-family: var(--eink-max-font);
+  font-size: var(--eink-max-size);
+  line-height: var(--eink-max-line);
+  
+  /* Textura de papel máis pronunciada */
+  background-image: 
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
+  
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Capa de redución de luz adicional */
+.eink-max body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10000;
+  
+  /* Patrón de píxeles e-ink máis visible */
+  background-image: 
+    radial-gradient(circle, rgba(26,24,22,0.05) 0.6px, transparent 0.6px);
+  background-size: 2.5px 2.5px;
+  
+  /* Viñeteado máis forte */
+  box-shadow: inset 0 0 200px rgba(26,24,22,0.12);
+}
+
+/* Capa extra de escurecemento */
+.eink-max body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: rgba(30, 28, 25, 0.06);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   MODO 2: EINK-MAX-READING (Optimizado para lectura)
+   Uso: <html class="eink-max-reading">
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.eink-max-reading {
+  filter: 
+    grayscale(100%)
+    sepia(15%)
+    brightness(90%)
+    contrast(85%);
+  
+  background: #cac4ba;
+  min-height: 100vh;
+}
+
+.eink-max-reading body {
+  max-width: 600px;  /* Ancho óptimo para lectura */
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  background: #cac4ba;
+  color: #1c1a18;
+  font-family: 'Literata', 'Georgia', serif;
+  font-size: 19px;
+  line-height: 1.8;
+  letter-spacing: 0.01em;
+  word-spacing: 0.05em;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.eink-max-reading p {
+  margin-bottom: 1.5em;
+  text-indent: 1.5em;
+}
+
+.eink-max-reading p:first-of-type {
+  text-indent: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   MODO 3: EINK-MAX-NIGHT (Nocturno extremo)
+   Uso: <html class="eink-max-night">
+   Máxima redución de luz para uso nocturno
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.eink-max-night {
+  filter: 
+    grayscale(100%)
+    sepia(35%)            /* Máis cálido */
+    brightness(70%)       /* Moi escuro */
+    contrast(78%);        /* Moi suave */
+  
+  background: #a89888;
+  min-height: 100vh;
+}
+
+.eink-max-night body {
+  background: #a89888;
+  color: #1a1614;
+  font-family: var(--eink-max-font);
+  font-size: var(--eink-max-size);
+  line-height: var(--eink-max-line);
+}
+
+/* Modo nocturno invertido (texto claro sobre escuro) */
+.eink-max-night.inverted {
+  filter: 
+    grayscale(100%)
+    sepia(20%)
+    brightness(85%)
+    contrast(80%);
+}
+
+.eink-max-night.inverted body {
+  background: #1e1c1a;
+  color: #b8b0a4;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   MODO 4: EINK-MAX-SEPIA (Calidez máxima, con cor)
+   Uso: <html class="eink-max-sepia">
+   Para quen prefire manter algo de cor pero máxima calidez
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.eink-max-sepia {
+  filter: 
+    sepia(40%)            /* Moi cálido */
+    saturate(60%)         /* Cores moi apagadas */
+    brightness(88%)
+    contrast(85%)
+    hue-rotate(-5deg);    /* Xira cara laranxa */
+  
+  background: #d4c8b8;
+  min-height: 100vh;
+}
+
+.eink-max-sepia body {
+  background: #d4c8b8;
+  color: #2a2622;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   COMPOÑENTES BÁSICOS (para todos os modos max)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.eink-max h1, .eink-max h2, .eink-max h3,
+.eink-max-reading h1, .eink-max-reading h2, .eink-max-reading h3,
+.eink-max-night h1, .eink-max-night h2, .eink-max-night h3,
+.eink-max-sepia h1, .eink-max-sepia h2, .eink-max-sepia h3 {
+  font-family: 'Atkinson Hyperlegible', 'Verdana', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 1.5em 0 0.75em;
+}
+
+.eink-max a, .eink-max-reading a, .eink-max-night a, .eink-max-sepia a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+/* Botóns sen cor */
+[class*="eink-max"] .eink-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.2rem;
+  font-family: 'Atkinson Hyperlegible', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--eink-max-paper, #c4beb4);
+  background: var(--eink-max-ink, #1a1816);
+  border: 2px solid var(--eink-max-ink, #1a1816);
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+[class*="eink-max"] .eink-btn:hover {
+  opacity: 0.85;
+}
+
+[class*="eink-max"] .eink-btn--outline {
+  color: var(--eink-max-ink, #1a1816);
+  background: transparent;
+}
+
+/* Inputs */
+[class*="eink-max"] input,
+[class*="eink-max"] textarea,
+[class*="eink-max"] select {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--eink-max-ink, #1a1816);
+  background: var(--eink-max-paper-light, #cec8be);
+  border: 1px solid var(--eink-max-border, #a09a90);
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+
+[class*="eink-max"] input:focus,
+[class*="eink-max"] textarea:focus,
+[class*="eink-max"] select:focus {
+  outline: 2px solid var(--eink-max-gray, #8a857c);
+  outline-offset: 1px;
+}
+
+/* Tarxetas */
+[class*="eink-max"] .eink-card {
+  background: var(--eink-max-paper-light, #cec8be);
+  border: 1px solid var(--eink-max-border, #a09a90);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  border-radius: 2px;
+}
+
+/* Alertas */
+[class*="eink-max"] .eink-alert {
+  padding: 1rem 1.25rem;
+  border-left: 4px solid var(--eink-max-gray, #8a857c);
+  background: rgba(160, 154, 144, 0.25);
+  margin: 1rem 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   IMAXES - Escala de grises forzada
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+[class*="eink-max"] img,
+[class*="eink-max"] svg,
+[class*="eink-max"] video,
+[class*="eink-max"] canvas {
+  filter: grayscale(100%) contrast(95%) brightness(100%);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SELECCIÓN DE TEXTO (sen highlight brillante)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+[class*="eink-max"] ::selection {
+  background: var(--eink-max-gray, #8a857c);
+  color: var(--eink-max-paper, #c4beb4);
+}
+
+[class*="eink-max"] ::-moz-selection {
+  background: var(--eink-max-gray, #8a857c);
+  color: var(--eink-max-paper, #c4beb4);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SCROLL - Sen scroll suave (como e-ink)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+[class*="eink-max"] {
+  scroll-behavior: auto !important;
+}
+
+[class*="eink-max"] * {
+  scroll-behavior: auto !important;
+}
+
+/* Scrollbar estilizado */
+[class*="eink-max"]::-webkit-scrollbar {
+  width: 8px;
+}
+
+[class*="eink-max"]::-webkit-scrollbar-track {
+  background: var(--eink-max-paper-dark, #b8b2a8);
+}
+
+[class*="eink-max"]::-webkit-scrollbar-thumb {
+  background: var(--eink-max-gray, #8a857c);
+  border-radius: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 600px) {
+  :root {
+    --eink-max-size: 17px;
+    --eink-max-line: 1.7;
+  }
+  
+  .eink-max-reading body {
+    padding: 1.5rem 1rem;
+    font-size: 17px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ACCESIBILIDADE - Reduce movemento
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  [class*="eink-max"] * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   PRINT - Sen filtros para imprimir
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@media print {
+  [class*="eink-max"] {
+    filter: none !important;
+  }
+  
+  [class*="eink-max"] body::before,
+  [class*="eink-max"] body::after {
+    display: none !important;
+  }
+  
+  [class*="eink-max"] body {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   UTILIDADES
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.eink-max-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.eink-max-narrow {
+  max-width: 600px;
+}
+
+.eink-max-text-center { text-align: center; }
+.eink-max-text-muted { opacity: 0.7; }
+.eink-max-mb { margin-bottom: 1rem; }
+.eink-max-mt { margin-top: 1rem; }
